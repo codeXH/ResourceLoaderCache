@@ -1,0 +1,16 @@
+PODS:
+  - ResourceLoaderCache (0.1.0)
+
+DEPENDENCIES:
+  - ResourceLoaderCache (from `../`)
+
+EXTERNAL SOURCES:
+  ResourceLoaderCache:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  ResourceLoaderCache: 9e3d88b28ea7a32354fb7b66d585badad4545cb1
+
+PODFILE CHECKSUM: 422eff79ae48daf2a016e45c86bb41fdbb1ba821
+
+COCOAPODS: 1.11.3
