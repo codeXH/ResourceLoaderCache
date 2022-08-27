@@ -9,12 +9,16 @@
 /* Begin PBXBuildFile section */
 		2C363AFBEE773F23E9BEE2C9 /* Pods_ResourceLoaderCache_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A7002A31F76885787D5BB91 /* Pods_ResourceLoaderCache_Tests.framework */; };
 		3478B3864E1C85DE9DBFF8E8 /* Pods_ResourceLoaderCache_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FBBC3910E92791DD44B6D51 /* Pods_ResourceLoaderCache_Example.framework */; };
-		607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD51AFB9204008FA782 /* AppDelegate.swift */; };
-		607FACD81AFB9204008FA782 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD71AFB9204008FA782 /* ViewController.swift */; };
-		607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 607FACD91AFB9204008FA782 /* Main.storyboard */; };
 		607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDC1AFB9204008FA782 /* Images.xcassets */; };
 		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
 		607FACEC1AFB9204008FA782 /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACEB1AFB9204008FA782 /* Tests.swift */; };
+		9CD6EF9228BA024C0033997C /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CD6EF8C28BA024C0033997C /* PlayerView.swift */; };
+		9CD6EF9328BA024C0033997C /* PlayerLoading.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CD6EF8D28BA024C0033997C /* PlayerLoading.swift */; };
+		9CD6EF9428BA024C0033997C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CD6EF8E28BA024C0033997C /* AppDelegate.swift */; };
+		9CD6EF9528BA024C0033997C /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CD6EF8F28BA024C0033997C /* ViewController.swift */; };
+		9CD6EF9628BA024C0033997C /* PlayerSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CD6EF9028BA024C0033997C /* PlayerSlider.swift */; };
+		9CD6EF9728BA024C0033997C /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CD6EF9128BA024C0033997C /* RootViewController.swift */; };
+		9CD6EF9928BA03440033997C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9CD6EF9828BA03440033997C /* Main.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -33,9 +37,6 @@
 		3EC82EE4D0C4B02881F33BF2 /* Pods-ResourceLoaderCache_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ResourceLoaderCache_Tests.debug.xcconfig"; path = "Target Support Files/Pods-ResourceLoaderCache_Tests/Pods-ResourceLoaderCache_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		607FACD01AFB9204008FA782 /* ResourceLoaderCache_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ResourceLoaderCache_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACD41AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		607FACD51AFB9204008FA782 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		607FACD71AFB9204008FA782 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		607FACDA1AFB9204008FA782 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		607FACDC1AFB9204008FA782 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		607FACDF1AFB9204008FA782 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		607FACE51AFB9204008FA782 /* ResourceLoaderCache_Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ResourceLoaderCache_Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -43,6 +44,14 @@
 		607FACEB1AFB9204008FA782 /* Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests.swift; sourceTree = "<group>"; };
 		63B31B0FF7408B15B6323191 /* Pods-ResourceLoaderCache_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ResourceLoaderCache_Example.debug.xcconfig"; path = "Target Support Files/Pods-ResourceLoaderCache_Example/Pods-ResourceLoaderCache_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		9A5041136F9AE2744CEBBE7D /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
+		9CD6EF8B28BA024B0033997C /* ResourceLoaderCache_Example-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ResourceLoaderCache_Example-Bridging-Header.h"; sourceTree = "<group>"; };
+		9CD6EF8C28BA024C0033997C /* PlayerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
+		9CD6EF8D28BA024C0033997C /* PlayerLoading.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerLoading.swift; sourceTree = "<group>"; };
+		9CD6EF8E28BA024C0033997C /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		9CD6EF8F28BA024C0033997C /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		9CD6EF9028BA024C0033997C /* PlayerSlider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerSlider.swift; sourceTree = "<group>"; };
+		9CD6EF9128BA024C0033997C /* RootViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
+		9CD6EF9828BA03440033997C /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		9FBBC3910E92791DD44B6D51 /* Pods_ResourceLoaderCache_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ResourceLoaderCache_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B2D1645BFDCCC0CD65338572 /* Pods-ResourceLoaderCache_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ResourceLoaderCache_Tests.release.xcconfig"; path = "Target Support Files/Pods-ResourceLoaderCache_Tests/Pods-ResourceLoaderCache_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		C0388E81147EC59638A36F17 /* Pods-ResourceLoaderCache_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ResourceLoaderCache_Example.release.xcconfig"; path = "Target Support Files/Pods-ResourceLoaderCache_Example/Pods-ResourceLoaderCache_Example.release.xcconfig"; sourceTree = "<group>"; };
@@ -102,12 +111,17 @@
 		607FACD21AFB9204008FA782 /* Example for ResourceLoaderCache */ = {
 			isa = PBXGroup;
 			children = (
-				607FACD51AFB9204008FA782 /* AppDelegate.swift */,
-				607FACD71AFB9204008FA782 /* ViewController.swift */,
-				607FACD91AFB9204008FA782 /* Main.storyboard */,
+				9CD6EF8E28BA024C0033997C /* AppDelegate.swift */,
+				9CD6EF8D28BA024C0033997C /* PlayerLoading.swift */,
+				9CD6EF9028BA024C0033997C /* PlayerSlider.swift */,
+				9CD6EF8C28BA024C0033997C /* PlayerView.swift */,
+				9CD6EF8F28BA024C0033997C /* ViewController.swift */,
+				9CD6EF9128BA024C0033997C /* RootViewController.swift */,
+				9CD6EF9828BA03440033997C /* Main.storyboard */,
 				607FACDC1AFB9204008FA782 /* Images.xcassets */,
 				607FACDE1AFB9204008FA782 /* LaunchScreen.xib */,
 				607FACD31AFB9204008FA782 /* Supporting Files */,
+				9CD6EF8B28BA024B0033997C /* ResourceLoaderCache_Example-Bridging-Header.h */,
 			);
 			name = "Example for ResourceLoaderCache";
 			path = ResourceLoaderCache;
@@ -213,7 +227,7 @@
 					607FACCF1AFB9204008FA782 = {
 						CreatedOnToolsVersion = 6.3.1;
 						DevelopmentTeam = FYAWZHQF36;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 1340;
 					};
 					607FACE41AFB9204008FA782 = {
 						CreatedOnToolsVersion = 6.3.1;
@@ -248,7 +262,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */,
+				9CD6EF9928BA03440033997C /* Main.storyboard in Resources */,
 				607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */,
 				607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */,
 			);
@@ -294,10 +308,12 @@
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-ResourceLoaderCache_Example/Pods-ResourceLoaderCache_Example-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/ResourceLoaderCache/ResourceLoaderCache.framework",
+				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ResourceLoaderCache.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -333,8 +349,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				607FACD81AFB9204008FA782 /* ViewController.swift in Sources */,
-				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
+				9CD6EF9428BA024C0033997C /* AppDelegate.swift in Sources */,
+				9CD6EF9628BA024C0033997C /* PlayerSlider.swift in Sources */,
+				9CD6EF9728BA024C0033997C /* RootViewController.swift in Sources */,
+				9CD6EF9228BA024C0033997C /* PlayerView.swift in Sources */,
+				9CD6EF9528BA024C0033997C /* ViewController.swift in Sources */,
+				9CD6EF9328BA024C0033997C /* PlayerLoading.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -357,14 +377,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		607FACD91AFB9204008FA782 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				607FACDA1AFB9204008FA782 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		607FACDE1AFB9204008FA782 /* LaunchScreen.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -480,6 +492,7 @@
 			baseConfigurationReference = 63B31B0FF7408B15B6323191 /* Pods-ResourceLoaderCache_Example.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				DEVELOPMENT_TEAM = FYAWZHQF36;
 				INFOPLIST_FILE = ResourceLoaderCache/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
@@ -487,6 +500,8 @@
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "ResourceLoaderCache/ResourceLoaderCache_Example-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
 			};
@@ -497,6 +512,7 @@
 			baseConfigurationReference = C0388E81147EC59638A36F17 /* Pods-ResourceLoaderCache_Example.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				DEVELOPMENT_TEAM = FYAWZHQF36;
 				INFOPLIST_FILE = ResourceLoaderCache/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
@@ -504,6 +520,7 @@
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "ResourceLoaderCache/ResourceLoaderCache_Example-Bridging-Header.h";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
 			};
@@ -513,6 +530,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 3EC82EE4D0C4B02881F33BF2 /* Pods-ResourceLoaderCache_Tests.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				DEVELOPMENT_TEAM = FYAWZHQF36;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
@@ -536,6 +554,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = B2D1645BFDCCC0CD65338572 /* Pods-ResourceLoaderCache_Tests.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				DEVELOPMENT_TEAM = FYAWZHQF36;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(PLATFORM_DIR)/Developer/Library/Frameworks",

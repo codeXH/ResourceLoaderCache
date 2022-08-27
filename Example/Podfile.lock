@@ -1,8 +1,14 @@
 PODS:
   - ResourceLoaderCache (0.1.0)
+  - SnapKit (5.6.0)
 
 DEPENDENCIES:
   - ResourceLoaderCache (from `../`)
+  - SnapKit
+
+SPEC REPOS:
+  trunk:
+    - SnapKit
 
 EXTERNAL SOURCES:
   ResourceLoaderCache:
@@ -10,7 +16,8 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   ResourceLoaderCache: 9e3d88b28ea7a32354fb7b66d585badad4545cb1
+  SnapKit: e01d52ebb8ddbc333eefe2132acf85c8227d9c25
 
-PODFILE CHECKSUM: 422eff79ae48daf2a016e45c86bb41fdbb1ba821
+PODFILE CHECKSUM: a3df64b99f92092a53cb5bfec8a8fe432f504b25
 
 COCOAPODS: 1.11.3

@@ -28,7 +28,7 @@ final public class ResourceLoaderManager: NSObject, AVAssetResourceLoaderDelegat
     public func playerItem(with url: URL) -> AVPlayerItem? {
         self.originURL = url
         guard let assetURL = url.replaceScheme() else { return nil}
-        log("load resoureURL = \(assetURL.absoluteString)")
+        
         let urlAsset = AVURLAsset(url: assetURL, options: nil)
         urlAsset.resourceLoader.setDelegate(self, queue: DispatchQueue.main)
         
@@ -73,9 +73,9 @@ final public class ResourceLoaderManager: NSObject, AVAssetResourceLoaderDelegat
     /// 需要将修改过 scheme 的 URL 换回正常 URL
     public func resourceLoader(_ resourceLoader: AVAssetResourceLoader, shouldWaitForLoadingOfRequestedResource loadingRequest: AVAssetResourceLoadingRequest) -> Bool {
         
-        if let dataRequest = loadingRequest.dataRequest {
-            log("loadingRequest offset = \(dataRequest.currentOffset) length = \(dataRequest.requestedLength)")
-        }
+//        if let dataRequest = loadingRequest.dataRequest {
+//            log("loadingRequest offset = \(dataRequest.currentOffset) length = \(dataRequest.requestedLength)")
+//        }
         
         if let resourceURL = loadingRequest.request.url {
             if let loader = loader(for: loadingRequest) {

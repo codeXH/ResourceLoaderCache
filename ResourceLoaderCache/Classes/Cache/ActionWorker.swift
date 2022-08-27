@@ -92,12 +92,14 @@ class ActionWorker {
         if action.type == .local {
             // 如果本地缓存数据中有该数据，则直接将数据抛出
             if let data = cacheWorker.cached(for: action.range) {
-                delegate?.action(worker: self, didReceive: data, isLocal: true)
-                
+            
+                // TODO: 这里需要修改
                 // 如果是 0..<2 字节数据，需要触发 ResourceLoadingRequest 的数据响应
                 if action.range.lowerBound == 0, action.range.upperBound == 2 {
                     delegate?.action(worker: self, didReceive: URLResponse())
                 }
+                
+                delegate?.action(worker: self, didReceive: data, isLocal: true)
                 
                 processActions()
             } else {

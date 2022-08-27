@@ -8,7 +8,7 @@
 import Foundation
 
 /// 扩展一个error类型
-enum MediaCacheError: Error {
+public enum MediaCacheError: Error {
     case noData
     case cacheFileError
     case noFoundLocalCacheData

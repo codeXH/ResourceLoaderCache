@@ -21,7 +21,7 @@ struct DownloadInfo: Codable {
 //: 缓存配置 - 数据 range 的归档解档
 //: 归档的文件名和存储数据的文件名不是同一个：需要给归档的文件添加后缀
 //: 可对外提供下载速度和进度
-struct CacheConfiguration: Codable {
+public struct CacheConfiguration: Codable {
 
     var url: URL?
     private(set) var filePath: String?
@@ -33,18 +33,18 @@ struct CacheConfiguration: Codable {
 
     // MARK: - 计算属性
     /// 下载进度
-    var progress: Float {
+    public var progress: Float {
         guard let length = contentInfo?.contentLength, length > 0 else { return 0 }
         return Float(downloadedBytes ?? 0) / Float(length)
     }
 
     /// 下载字节数
-    var downloadedBytes: Int? {
+    public var downloadedBytes: Int? {
         return internalCacheFragments.reduce(into: 0) { $0 += $1.count }
     }
 
     /// 下载速度
-    var downloadSpeed: Double? {
+    public var downloadSpeed: Double? {
         var info: (Int, TimeInterval) = (0, 0)
         info = downloadInfos.reduce(into: (0, 0)) { result, downloadInfo in
             result.0 += downloadInfo.bytes ?? 0
