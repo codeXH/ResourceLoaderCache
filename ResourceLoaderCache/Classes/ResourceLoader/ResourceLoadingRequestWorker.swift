@@ -33,13 +33,11 @@ final class ResourceLoadingRequestWorker {
         let length = dataRequest.requestedLength
         let toEnd = dataRequest.requestsAllDataToEndOfResource
         
-        log("offset = \(offset) length = \(length) toEnd = \(toEnd)")
-        
         // 如果数据回填过，则 currentOffset 会发生变化
         if dataRequest.currentOffset != 0 {
             offset = dataRequest.currentOffset
         }
-        
+        log("offset = \(offset) length = \(length) toEnd = \(toEnd)")
         mediaDownloader.downloadTask(fromOffset: UInt64(offset), length: UInt64(length), to: toEnd)
     }
     
@@ -55,28 +53,38 @@ final class ResourceLoadingRequestWorker {
     
     /// 如果数据已经请求完成 需要 finish
     func finish() {
-        if !request.isFinished {
-            request.finishLoading(with: MediaCacheError.resourceLoaderCancelled)
+        DispatchQueue.main.async {
+             if self.request.isFinished == false {
+                self.request.finishLoading(with: MediaCacheError.resourceLoaderCancelled)
+            }
         }
     }
 }
 
 // MARK: - MediaDownloadDelegate
 extension ResourceLoadingRequestWorker: MediaDownloadDelegate {
-    func media(downloader: MediaDownloader, didReceive data: Data) {
-        // 数据回填
-        request.dataRequest?.respond(with: data)
-    }
     
+    // 数据响应
     func media(downloader: MediaDownloader, didReceive response: URLResponse) {
-        fullfillContentInfo()
+        DispatchQueue.main.async {
+            self.fullfillContentInfo()
+        }
     }
     
+    // 数据回填
+    func media(downloader: MediaDownloader, didReceive data: Data) {
+        DispatchQueue.main.async {
+            self.request.dataRequest?.respond(with: data)
+        }
+    }
+    
+    // 完成一个ResourceLoader
     func media(downloader: MediaDownloader, didFinished error: Error?) {
         
         if let err = error as? URLError, err.code == URLError.Code.cancelled { return }
-        
-        (error == nil) ? request.finishLoading() : request.finishLoading(with: error!)
+        DispatchQueue.main.async {
+            (error == nil) ? self.request.finishLoading() : self.request.finishLoading(with: error!)
+        }
         
         // 把错误回调给 ResourceLoader
         resourceLoadingError?(self, error)

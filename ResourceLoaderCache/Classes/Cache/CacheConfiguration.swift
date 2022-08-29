@@ -99,6 +99,7 @@ public struct CacheConfiguration: Codable {
     mutating func addCacheFragment(range: Range<UInt64>) {
         guard !range.isEmpty else { return }
 
+        log("internalCacheFragments = \(internalCacheFragments)")
         if internalCacheFragments.isEmpty {
             internalCacheFragments.append(range)
         } else {
@@ -139,14 +140,7 @@ public struct CacheConfiguration: Codable {
                 let expandFragmentRange = range.lowerBound ..< range.upperBound + 1
                 let intersectionRange = expandFirstRange.clamped(to: expandFragmentRange)
                 
-                // 完全包含于数组
-                if !intersectionRange.isEmpty {
-                    let location = min(firstRange.lowerBound, range.lowerBound)
-                    let endOffset = max(firstRange.upperBound, range.upperBound)
-                    let combineRange = location ..< endOffset
-                    internalCacheFragments.remove(at: indexSet.first!)
-                    internalCacheFragments.insert(combineRange, at: indexSet.first!)
-                } else {
+                if intersectionRange.isEmpty {
                     if firstRange.lowerBound > range.lowerBound {
                         // range 的起点更小
                         internalCacheFragments.insert(range, at: indexSet.last!)
@@ -154,6 +148,13 @@ public struct CacheConfiguration: Codable {
                         // range 完全不相交与数组
                         internalCacheFragments.insert(range, at: indexSet.last! + 1)
                     }
+                } else {
+                    // 完全包含于数组
+                    let location = min(firstRange.lowerBound, range.lowerBound)
+                    let endOffset = max(firstRange.upperBound, range.upperBound)
+                    let combineRange = location ..< endOffset
+                    internalCacheFragments.remove(at: indexSet.first!)
+                    internalCacheFragments.insert(combineRange, at: indexSet.first!)
                 }
             }
         }

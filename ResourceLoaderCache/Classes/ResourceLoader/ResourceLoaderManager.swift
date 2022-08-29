@@ -73,12 +73,14 @@ final public class ResourceLoaderManager: NSObject, AVAssetResourceLoaderDelegat
     /// 需要将修改过 scheme 的 URL 换回正常 URL
     public func resourceLoader(_ resourceLoader: AVAssetResourceLoader, shouldWaitForLoadingOfRequestedResource loadingRequest: AVAssetResourceLoadingRequest) -> Bool {
         
-//        if let dataRequest = loadingRequest.dataRequest {
-//            log("loadingRequest offset = \(dataRequest.currentOffset) length = \(dataRequest.requestedLength)")
-//        }
+        // 同一个loadingRequest 会触发多次 - 0-2/0-8136036/409600-8136036
+        if let dataRequest = loadingRequest.dataRequest {
+            log("loadingRequest offset = \(dataRequest.currentOffset) length = \(dataRequest.requestedLength)")
+        }
         
         if let resourceURL = loadingRequest.request.url {
             if let loader = loader(for: loadingRequest) {
+                log("old loadingRequest start")
                 loader.add(request: loadingRequest)
             } else {
                 // ResourceLoader 使用原始 URL 初始化
@@ -93,7 +95,7 @@ final public class ResourceLoaderManager: NSObject, AVAssetResourceLoaderDelegat
                 if let key = keyForResourceLoader(requestURL: resourceURL) {
                     loaders[key] = loader
                 }
-                log("loadingRequest start")
+                log("new loadingRequest start")
                 loader.add(request: loadingRequest)
             }
             return true

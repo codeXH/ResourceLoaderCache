@@ -106,6 +106,7 @@ public class MediaDownloader {
             rangeLength = length
         }
         
+        log("downloadTask range = \(fromOffset ..< fromOffset + rangeLength)")
         // 根据给定的 range，获取需要请求的 range
         let actions = cacheWorker.cachedDataActions(for: fromOffset ..< (fromOffset + rangeLength))
         log("actions = \(actions)")
@@ -136,7 +137,6 @@ extension MediaDownloader: ActionWorkerDelegate {
         delegate?.media(downloader: self, didReceive: data)
     }
     
-    /// 如果首次请求完成  range 会从 2 开始
     func action(worker: ActionWorker, didFinish error: Error?) {
         MediaDownloaderStatus.shared.remove(url: self.url)
         if error == nil && self.downloadToEnd {

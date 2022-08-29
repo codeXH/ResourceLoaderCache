@@ -84,6 +84,7 @@ class ActionWorker {
         
         // 如果没有值则返回
         guard let action = actions.first else {
+            log("delegate?.action(worker: self, didFinish: nil)")
             delegate?.action(worker: self, didFinish: nil)
             return
         }
@@ -96,9 +97,11 @@ class ActionWorker {
                 // TODO: 这里需要修改
                 // 如果是 0..<2 字节数据，需要触发 ResourceLoadingRequest 的数据响应
                 if action.range.lowerBound == 0, action.range.upperBound == 2 {
+                    log("delegate?.action(worker: self, didReceive: URLResponse())")
                     delegate?.action(worker: self, didReceive: URLResponse())
                 }
                 
+                log("delegate?.action(worker: self, didReceive: data, isLocal: true)")
                 delegate?.action(worker: self, didReceive: data, isLocal: true)
                 
                 processActions()
@@ -157,6 +160,7 @@ extension ActionWorker: URLSessionDelegateObjectDelegate {
         if let mimeType = response.mimeType, !mimeType.contains("video/"), !mimeType.contains("audio/"), !mimeType.contains("application") {
             completionHandler(.cancel)
         } else {
+            log("delegate.actin(worker: self, didReceivce: response")
             delegate?.action(worker: self, didReceive: response)
             
             if canSaveToCache {
@@ -171,6 +175,7 @@ extension ActionWorker: URLSessionDelegateObjectDelegate {
         if isCancelled { return }
         if canSaveToCache {
             let range = UInt64(startOffset) ..< UInt64(startOffset + data.count)
+            log("range = \(range)")
             do {
                 try cacheWorker.cache(data: data, for: range)
             } catch {
@@ -180,6 +185,7 @@ extension ActionWorker: URLSessionDelegateObjectDelegate {
             cacheWorker.save()
         }
         startOffset += data.count
+        log("delegate?.action(worker: self, didReceive: data, isLocal: false)")
         delegate?.action(worker: self, didReceive: data, isLocal: false)
         notifyDownloadProgress(with: false, finished: false)
     }
@@ -190,6 +196,7 @@ extension ActionWorker: URLSessionDelegateObjectDelegate {
             cacheWorker.save()
         }
         if let error = error {
+            log("delegate?.action(worker: self, didFinish: error)")
             delegate?.action(worker: self, didFinish: error)
             notifyDownloadFinished(with: error)
         } else {

@@ -26,6 +26,27 @@ final class ResourceLoader {
     /// 处理拦截到的 AVAssetResourceLoadingRequest，根据媒体支持的类型不同，request 可能会有多个
     /// - Parameter request: 资源请求对象
     func add(request: AVAssetResourceLoadingRequest) {
+        if pendingRequestWorks.isEmpty {
+            startWork(with: request)
+        } else {
+            startWorkNoCache(with: request)
+        }
+    }
+    
+    func startWork(with request: AVAssetResourceLoadingRequest) {
+        MediaDownloaderStatus.shared.add(url: url)
+        
+        let downloader = MediaDownloader(with: url, cacheWorker: MediaCacheWorker(with: url))
+        let requestWorker = ResourceLoadingRequestWorker(request: request, mediaDownloader: downloader)
+        
+        pendingRequestWorks.append(requestWorker)
+        requestWorker.resourceLoadingError = { [weak self] (loading, error) in
+            self?.requestWorker(with: loading, error: error)
+        }
+        requestWorker.startWork()
+    }
+    
+    func startWorkNoCache(with request: AVAssetResourceLoadingRequest) {
         MediaDownloaderStatus.shared.add(url: url)
         
         let requestWorker = ResourceLoadingRequestWorker(request: request, mediaDownloader: mediaDownloader)
@@ -54,7 +75,7 @@ final class ResourceLoader {
     func remove(request: AVAssetResourceLoadingRequest) {
         for work in pendingRequestWorks where work.request == request {
             work.finish()
-            pendingRequestWorks.removeAll { $0 == work}
+            pendingRequestWorks.removeAll { $0 == work }
         }
     }
     
