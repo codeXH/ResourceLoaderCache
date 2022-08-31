@@ -51,6 +51,13 @@ class MediaCacheWorker {
             return nil
         }
     }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+        save()
+        writeFileHandle.closeFile()
+        readFileHandle.closeFile()
+    }
 
     // MARK: - FileHandle 操作
 
@@ -205,12 +212,5 @@ class MediaCacheWorker {
             let time = Date().timeIntervalSince(startWriteDate)
             internalCacheConfiguraion.addDownloadedBytes(bytes: writeBytes, spent: time)
         }
-    }
-    
-    deinit {
-        NotificationCenter.default.removeObserver(self)
-        save()
-        writeFileHandle.closeFile()
-        readFileHandle.closeFile()
     }
 }

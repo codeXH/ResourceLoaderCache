@@ -67,6 +67,10 @@ class ActionWorker {
         self.cacheWorker = cacheWorker
     }
     
+    deinit {
+        cancel()
+    }
+    
     // MARK: - Actions
     /// 开始分片下载
     func start() {
@@ -78,47 +82,57 @@ class ActionWorker {
         isCancelled = true
     }
     
-    /// 执行不同的 action
+    /// 执行不同的 action - 递归调用会导致栈空间不足
     private func processActions() {
+        
         if isCancelled { return }
         
-        // 如果没有值则返回
         guard let action = actions.first else {
             log("delegate?.action(worker: self, didFinish: nil)")
             delegate?.action(worker: self, didFinish: nil)
             return
         }
+        
         actions.removeFirst()
         
-        if action.type == .local {
-            // 如果本地缓存数据中有该数据，则直接将数据抛出
-            if let data = cacheWorker.cached(for: action.range) {
-            
-                // TODO: 这里需要修改
-                // 如果是 0..<2 字节数据，需要触发 ResourceLoadingRequest 的数据响应
-                if action.range.lowerBound == 0, action.range.upperBound == 2 {
-                    log("delegate?.action(worker: self, didReceive: URLResponse())")
-                    delegate?.action(worker: self, didReceive: URLResponse())
-                }
-                
-                log("delegate?.action(worker: self, didReceive: data, isLocal: true)")
-                delegate?.action(worker: self, didReceive: data, isLocal: true)
-                
-                processActions()
-            } else {
-                delegate?.action(worker: self, didFinish: MediaCacheError.noFoundLocalCacheData)
-            }
-        } else {
-            // 开始分片请求 - 设置分片的范围
-            let fromOffset = action.range.lowerBound
-            let endOffset = Int(action.range.lowerBound) + action.range.count - 1
-            var request = URLRequest(url: url)
-            request.setValue("bytes=\(fromOffset)-\(endOffset)", forHTTPHeaderField: "Range")
-            log("下载数据范围 bytes =\(fromOffset)-\(endOffset)")
-            startOffset = Int(action.range.lowerBound)
-            task = session.dataTask(with: request)
-            task?.resume()
+        switch action.type {
+        case .local:
+            cache(at: action)
+        case .remote:
+            request(at: action)
         }
+    }
+    
+    /// 加载本地缓存
+    /// - Parameter action: 缓存数据
+    func cache(at action: CacheAction) {
+        // 如果本地缓存数据中有该数据，则直接将数据抛出
+        
+        guard let data = cacheWorker.cached(for: action.range) else {
+            delegate?.action(worker: self, didFinish: MediaCacheError.noFoundLocalCacheData)
+            return
+        }
+        
+        if action.range.lowerBound == 0, action.range.upperBound == 2 {
+            log("cache delegate?.action(worker: self, didReceive: URLResponse())")
+            delegate?.action(worker: self, didReceive: URLResponse())
+        }
+        log("cache delegate?.action(worker: self, didReceive: data, isLocal: true)")
+        delegate?.action(worker: self, didReceive: data, isLocal: true)
+        processActions()
+    }
+    
+    /// 开始分片请求 - 设置分片的范围
+    /// - Parameter action: 分片数据
+    func request(at action: CacheAction) {
+        let fromOffset = action.range.lowerBound
+        let endOffset = Int(action.range.lowerBound) + action.range.count - 1
+        var request = URLRequest(url: url)
+        request.setValue("bytes=\(fromOffset)-\(endOffset)", forHTTPHeaderField: "Range")
+        log("下载数据范围 bytes =\(fromOffset)-\(endOffset)")
+        startOffset = Int(action.range.lowerBound)
+        task = session.dataTask(with: request)
+        task?.resume()
     }
     
     /// 下载进度
@@ -160,7 +174,7 @@ extension ActionWorker: URLSessionDelegateObjectDelegate {
         if let mimeType = response.mimeType, !mimeType.contains("video/"), !mimeType.contains("audio/"), !mimeType.contains("application") {
             completionHandler(.cancel)
         } else {
-            log("delegate.actin(worker: self, didReceivce: response")
+            log("request delegate?.action(worker: self, didReceive: response)")
             delegate?.action(worker: self, didReceive: response)
             
             if canSaveToCache {
@@ -173,9 +187,10 @@ extension ActionWorker: URLSessionDelegateObjectDelegate {
     func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive data: Data) {
     
         if isCancelled { return }
+        var ran: Range<UInt64> = 0..<1
         if canSaveToCache {
             let range = UInt64(startOffset) ..< UInt64(startOffset + data.count)
-            log("range = \(range)")
+            ran = range
             do {
                 try cacheWorker.cache(data: data, for: range)
             } catch {
@@ -185,18 +200,18 @@ extension ActionWorker: URLSessionDelegateObjectDelegate {
             cacheWorker.save()
         }
         startOffset += data.count
-        log("delegate?.action(worker: self, didReceive: data, isLocal: false)")
+        log("request delegate?.action(worker: self, didReceive: data, isLocal: false, range: \(ran)")
         delegate?.action(worker: self, didReceive: data, isLocal: false)
         notifyDownloadProgress(with: false, finished: false)
     }
     
     func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
+        log("urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?)")
         if canSaveToCache {
             cacheWorker.finishWritting()
             cacheWorker.save()
         }
         if let error = error {
-            log("delegate?.action(worker: self, didFinish: error)")
             delegate?.action(worker: self, didFinish: error)
             notifyDownloadFinished(with: error)
         } else {

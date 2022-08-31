@@ -78,33 +78,39 @@ final public class ResourceLoaderManager: NSObject, AVAssetResourceLoaderDelegat
             log("loadingRequest offset = \(dataRequest.currentOffset) length = \(dataRequest.requestedLength)")
         }
         
-        if let resourceURL = loadingRequest.request.url {
-            if let loader = loader(for: loadingRequest) {
-                log("old loadingRequest start")
-                loader.add(request: loadingRequest)
-            } else {
-                // ResourceLoader 使用原始 URL 初始化
-                let loader = ResourceLoader(with: originURL)
-                // 错误处理
-                loader.resourceLoadError = { [weak self] (loader, error) in
-                    loader.cancel()
-                    log("loadingRequest error \(error)")
-                    self?.delegate?.resourceLoaderManagerLoad(url: loader.url, didFail: error)
-                }
-                // 保存 loader
-                if let key = keyForResourceLoader(requestURL: resourceURL) {
-                    loaders[key] = loader
-                }
-                log("new loadingRequest start")
-                loader.add(request: loadingRequest)
-            }
-            return true
+        guard let resourceURL = loadingRequest.request.url else {
+            return false
         }
-        return false
+        
+        if let loader = loader(for: loadingRequest) {
+            log("old loadingRequest start")
+            loader.add(request: loadingRequest)
+        } else {
+            // ResourceLoader 使用原始 URL 初始化
+            let loader = ResourceLoader(with: originURL)
+            // 错误处理
+            loader.resourceLoadError = { [weak self] (loader, error) in
+                loader.cancel()
+                log("loadingRequest error \(error)")
+                self?.delegate?.resourceLoaderManagerLoad(url: loader.url, didFail: error)
+            }
+            // 保存 loader
+            if let key = keyForResourceLoader(requestURL: resourceURL) {
+                loaders[key] = loader
+            }
+            log("new loadingRequest start")
+            loader.add(request: loadingRequest)
+        }
+        
+        return true
     }
     
     /// 把 loadingRequest 移出下载任务的回调列表（停止填充）
     public func resourceLoader(_ resourceLoader: AVAssetResourceLoader, didCancel loadingRequest: AVAssetResourceLoadingRequest) {
+        if let dataRequest = loadingRequest.dataRequest {
+            log("resourceLoader did Cancel offset = \(dataRequest.currentOffset) length = \(dataRequest.requestedLength)")
+        }
+        
         let loader = loader(for: loadingRequest)
         loader?.remove(request: loadingRequest)
     }

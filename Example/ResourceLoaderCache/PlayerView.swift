@@ -87,6 +87,7 @@ open class PlayerView: UIView {
     public func setPlayerSourceUrl(url: URL) {
         
         videoLoader = ResourceLoaderManager()
+        videoLoader?.cleanCache()
         
         if playerItem != nil {
             playerItem?.removeObserver(self, forKeyPath: "status")

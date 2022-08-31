@@ -82,9 +82,10 @@ public class MediaDownloader {
     }
      
     public func cancel() {
-        self.actionWorker?.cancel()
         self.actionWorker?.delegate = nil
         MediaDownloaderStatus.shared.remove(url: self.url)
+        self.actionWorker?.cancel()
+        self.actionWorker = nil
     }
     
     /// 具体的分片下载任务

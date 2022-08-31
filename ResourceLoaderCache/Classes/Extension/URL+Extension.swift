@@ -10,7 +10,7 @@ import Foundation
 extension URL {
     
     /// 替换链接 scheme
-    /// - Parameter scheme: http://www.baidu.com  中的 http streaming
+    /// - Parameter scheme: http://www.baidu.com  -> streaming://www.baidu.com
     func replaceScheme(with scheme: String = "streaming") -> URL? {
         guard var components = URLComponents(url: self, resolvingAgainstBaseURL: false) else {
             return nil

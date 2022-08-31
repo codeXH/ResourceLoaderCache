@@ -53,11 +53,9 @@ final class ResourceLoadingRequestWorker {
     
     /// 如果数据已经请求完成 需要 finish
     func finish() {
-        DispatchQueue.main.async {
-             if self.request.isFinished == false {
-                self.request.finishLoading(with: MediaCacheError.resourceLoaderCancelled)
-            }
-        }
+        if request.isFinished == false {
+           request.finishLoading(with: MediaCacheError.resourceLoaderCancelled)
+       }
     }
 }
 
@@ -66,25 +64,19 @@ extension ResourceLoadingRequestWorker: MediaDownloadDelegate {
     
     // 数据响应
     func media(downloader: MediaDownloader, didReceive response: URLResponse) {
-        DispatchQueue.main.async {
-            self.fullfillContentInfo()
-        }
+        fullfillContentInfo()
     }
     
     // 数据回填
     func media(downloader: MediaDownloader, didReceive data: Data) {
-        DispatchQueue.main.async {
-            self.request.dataRequest?.respond(with: data)
-        }
+        request.dataRequest?.respond(with: data)
     }
     
     // 完成一个ResourceLoader
     func media(downloader: MediaDownloader, didFinished error: Error?) {
         
         if let err = error as? URLError, err.code == URLError.Code.cancelled { return }
-        DispatchQueue.main.async {
-            (error == nil) ? self.request.finishLoading() : self.request.finishLoading(with: error!)
-        }
+        (error == nil) ? request.finishLoading() : request.finishLoading(with: error!)
         
         // 把错误回调给 ResourceLoader
         resourceLoadingError?(self, error)

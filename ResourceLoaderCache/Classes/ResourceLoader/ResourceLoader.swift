@@ -23,17 +23,37 @@ final class ResourceLoader {
         self.mediaDownloader = MediaDownloader(with: url, cacheWorker: MediaCacheWorker(with: url))
     }
     
+    deinit {
+        mediaDownloader.cancel()
+    }
+    
     /// 处理拦截到的 AVAssetResourceLoadingRequest，根据媒体支持的类型不同，request 可能会有多个
     /// - Parameter request: 资源请求对象
     func add(request: AVAssetResourceLoadingRequest) {
+        
+        log(MemoryAddress(of: self))
         if pendingRequestWorks.isEmpty {
+            log("startWork")
             startWork(with: request)
         } else {
+            log("startNoCacheWork")
             startWorkNoCache(with: request)
         }
     }
     
     func startWork(with request: AVAssetResourceLoadingRequest) {
+        MediaDownloaderStatus.shared.add(url: url)
+        
+        let requestWorker = ResourceLoadingRequestWorker(request: request, mediaDownloader: mediaDownloader)
+        
+        pendingRequestWorks.append(requestWorker)
+        requestWorker.resourceLoadingError = { [weak self] (loading, error) in
+            self?.requestWorker(with: loading, error: error)
+        }
+        requestWorker.startWork()
+    }
+    
+    func startWorkNoCache(with request: AVAssetResourceLoadingRequest) {
         MediaDownloaderStatus.shared.add(url: url)
         
         let downloader = MediaDownloader(with: url, cacheWorker: MediaCacheWorker(with: url))
@@ -46,24 +66,12 @@ final class ResourceLoader {
         requestWorker.startWork()
     }
     
-    func startWorkNoCache(with request: AVAssetResourceLoadingRequest) {
-        MediaDownloaderStatus.shared.add(url: url)
-        
-        let requestWorker = ResourceLoadingRequestWorker(request: request, mediaDownloader: mediaDownloader)
-        
-        pendingRequestWorks.append(requestWorker)
-        requestWorker.resourceLoadingError = { [weak self] (loading, error) in
-            self?.requestWorker(with: loading, error: error)
-        }
-        requestWorker.startWork()
-    }
-    
     /// ResourceLoadingRequestWorker 下载结果回调
     func requestWorker(with loading: ResourceLoadingRequestWorker, error: Error?) {
         remove(request: loading.request)
         
-        if error != nil {
-            resourceLoadError?(self, error!)
+        if let error = error {
+            resourceLoadError?(self, error)
         }
         
         if pendingRequestWorks.isEmpty {
@@ -73,7 +81,12 @@ final class ResourceLoader {
     
     /// 移除资源请求对象
     func remove(request: AVAssetResourceLoadingRequest) {
+        log("remove(request: AVAssetResourceLoadingRequest)")
         for work in pendingRequestWorks where work.request == request {
+            if let dataRequest = request.dataRequest {
+                log("resourceLoader did Cancel offset = \(dataRequest.currentOffset) length = \(dataRequest.requestedLength)")
+            }
+            
             work.finish()
             pendingRequestWorks.removeAll { $0 == work }
         }

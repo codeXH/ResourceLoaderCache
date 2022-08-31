@@ -21,7 +21,7 @@ struct DownloadInfo: Codable {
 //: 缓存配置 - 数据 range 的归档解档
 //: 归档的文件名和存储数据的文件名不是同一个：需要给归档的文件添加后缀
 //: 可对外提供下载速度和进度
-public struct CacheConfiguration: Codable {
+public class CacheConfiguration: Codable {
 
     var url: URL?
     private(set) var filePath: String?
@@ -64,8 +64,8 @@ public struct CacheConfiguration: Codable {
     static func configuration(with filePath: String) -> CacheConfiguration {
     
         guard let data = FileManager.default.contents(atPath: filePath),
-                var configuration = try? JSONDecoder().decode(self, from: data) else {
-            var con = CacheConfiguration()
+                let configuration = try? JSONDecoder().decode(self, from: data) else {
+            let con = CacheConfiguration()
             con.fileName = filePath.urlPath().lastPathComponent
             con.filePath = filePath
             return con
@@ -78,7 +78,7 @@ public struct CacheConfiguration: Codable {
     /// 延时存储
     func save() {
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            archiveData()
+            self.archiveData()
         }
     }
 
@@ -96,22 +96,23 @@ public struct CacheConfiguration: Codable {
     /// 添加 range 到 CacheFragments 中 - seek 时将连续的 range 进行合并
     /// 0..<2, 2..<100 合并为 0..<100
     /// - Parameter range: 分片数据的 range
-    mutating func addCacheFragment(range: Range<UInt64>) {
+    func addCacheFragment(range: Range<UInt64>) {
         guard !range.isEmpty else { return }
-
+        // 0..<2
         log("internalCacheFragments = \(internalCacheFragments)")
         if internalCacheFragments.isEmpty {
             internalCacheFragments.append(range)
         } else {
             // 保存大数时 indexSet 不存储每一个数，只存储 0..<x 范围，性能比 Set 更好
+            // 2..<13632
             var indexSet = IndexSet()
             for (index, ran) in internalCacheFragments.enumerated() {
-                
+                // range 包含在数组中
                 if range.upperBound <= ran.lowerBound {
-                    // range 包含在数组中
+                    
                     if indexSet.isEmpty {
                         indexSet.insert(index)
-                        continue
+                        break
                     }
                 } else if range.lowerBound <= ran.upperBound, range.upperBound > ran.lowerBound {
                     // range 的一部分包含在数组中
@@ -154,6 +155,7 @@ public struct CacheConfiguration: Codable {
                     let endOffset = max(firstRange.upperBound, range.upperBound)
                     let combineRange = location ..< endOffset
                     internalCacheFragments.remove(at: indexSet.first!)
+                    // TODO: indexSet(3..<4) 可能会超出 internalCacheFragments 的下标
                     internalCacheFragments.insert(combineRange, at: indexSet.first!)
                 }
             }
@@ -163,7 +165,7 @@ public struct CacheConfiguration: Codable {
     }
     
     /// 记录保存分段视频的数据和花费的时间
-    mutating func addDownloadedBytes(bytes: Int, spent time: TimeInterval) {
+    func addDownloadedBytes(bytes: Int, spent time: TimeInterval) {
         log("addDownloadedBytes bytes:\(bytes) time:\(time)")
         downloadInfos.append(DownloadInfo(bytes: bytes, time: time))
     }
