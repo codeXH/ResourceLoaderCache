@@ -7,7 +7,9 @@ Cache media file while play media using AVPlayerr.
 Use AVAssetResourceLoader to control AVPlayer download media data.
 
 ## CocoaPods
+```
 pod 'ResourceLoaderCache'
+```
 
 ## Usage - Swift
 
