@@ -94,6 +94,7 @@ open class PlayerLoading: UIView {
         animation.isRemovedOnCompletion = false
         indicatorLayer.add(animation, forKey: RotationAnimationKey)
         isAnimating = true
+        isHidden = false
     }
     
     open func stopAnimating() {
@@ -103,6 +104,7 @@ open class PlayerLoading: UIView {
         
         indicatorLayer.removeAnimation(forKey: RotationAnimationKey)
         isAnimating = false
+        isHidden = true
     }
     
 }

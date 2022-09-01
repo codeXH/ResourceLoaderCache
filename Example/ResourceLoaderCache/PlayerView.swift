@@ -35,6 +35,7 @@ open class PlayerView: UIView {
     private var loadingIndicator = PlayerLoading()
     private lazy var timeSlider: PlayerSlider = {
         let slider = PlayerSlider(frame: .zero)
+        slider.addTarget(self, action: #selector(sliderTouchDown(slider:)), for: .touchDown)
         slider.addTarget(self, action: #selector(sliderTouchEnd(slider:)), for: .touchCancel)
         slider.addTarget(self, action: #selector(sliderTouchEnd(slider:)), for: .touchUpInside)
         slider.addTarget(self, action: #selector(sliderTouchEnd(slider:)), for: .touchUpOutside)
@@ -95,6 +96,7 @@ open class PlayerView: UIView {
         
         playerItem = videoLoader?.playerItem(with: url)
         playerItem?.addObserver(self, forKeyPath: "status", options: .new, context: nil)
+        player.addObserver(self, forKeyPath: "timeControlStatus", options: .new, context: nil)
         
         player.replaceCurrentItem(with: playerItem)
         playerLayer.player = player
@@ -136,9 +138,11 @@ open class PlayerView: UIView {
         }
         
         addSubview(loadingIndicator)
+        loadingIndicator.snp.makeConstraints { make in
+            make.width.height.equalTo(50)
+            make.center.equalToSuperview()
+        }
         loadingIndicator.startAnimating()
-        
-        autoPlay = true
     }
     
     func notify() {
@@ -185,22 +189,18 @@ open class PlayerView: UIView {
     }
     
     /// UISlider结束事件
-    @objc private func sliderTouchEnd(slider:UISlider) {
+    @objc private func sliderTouchDown(slider: UISlider) {
+        sliding = true
+    }
+    
+    @objc private func sliderTouchEnd(slider: UISlider) {
         sliding = false
-        DispatchQueue.main.async {
-            if self.playerBtn.isSelected  {
-                self.player.play()
-            }
-        }
-        
+        seek(to: slider.value)
     }
     
     /// 进度条改变
-    @objc private func sliderValueChanged(slider:UISlider) {
+    @objc private func sliderValueChanged(slider: UISlider) {
         sliding = true
-        if videoReadyToPlay {
-            seek(to: slider.value)
-        }
     }
     
     // MARK: - 视频播放、暂停、重播、速率、静音、指定时间
@@ -223,13 +223,6 @@ open class PlayerView: UIView {
     /// 静音
     public func muted(_ isMuted: Bool) {
         player.isMuted = isMuted
-    }
-    
-    /// seek 到指定时间
-    public func seekToTime(to time: CGFloat) {
-        pause()
-        let scale = time / CGFloat(CMTimeGetSeconds(playerItem?.duration ?? CMTime()))
-        seek(to: Float(scale))
     }
     
     /// seek 到指定进度
@@ -263,7 +256,6 @@ open class PlayerView: UIView {
                 self.playerBtn.isSelected = false
                 self.playerBtn.alpha = 1
             }
-            
         } else {
             isPlayEnd = false
         }
@@ -284,8 +276,8 @@ open class PlayerView: UIView {
         if keyPath == "status" {
             switch playerItem?.status {
             case .readyToPlay:
+                log("readyToPlay")
                 videoReadyToPlay = true
-                loadingIndicator.stopAnimating()
                 totalTimeLabel.text = formatPlayTime(seconds: TimeInterval(CMTimeGetSeconds(playerItem?.duration ?? CMTime())))
                 if autoPlay, !playerBtn.isSelected, !isPlayEnd {
                     didClickOnPlayBtn(sender: playerBtn)
@@ -296,6 +288,14 @@ open class PlayerView: UIView {
             case .unknown:
                 log("unknown")
             default: break
+            }
+        }
+        
+        if keyPath == "timeControlStatus" {
+            if player.timeControlStatus == .playing {
+                loadingIndicator.stopAnimating()
+            } else {
+                loadingIndicator.startAnimating()
             }
         }
     }
