@@ -31,7 +31,6 @@ final class ResourceLoader {
     /// - Parameter request: 资源请求对象
     func add(request: AVAssetResourceLoadingRequest) {
         
-        log(MemoryAddress(of: self))
         if pendingRequestWorks.isEmpty {
             log("startWork")
             startWork(with: request)
@@ -79,16 +78,13 @@ final class ResourceLoader {
         }
     }
     
-    /// 移除资源请求对象
+    /// 移除资源请求对象 - 已经执行的 mediadownload 也要取消
+    /// 停止数据下载，停止数据填充
     func remove(request: AVAssetResourceLoadingRequest) {
-        log("remove(request: AVAssetResourceLoadingRequest)")
         for work in pendingRequestWorks where work.request == request {
-            if let dataRequest = request.dataRequest {
-                log("resourceLoader did Cancel offset = \(dataRequest.currentOffset) length = \(dataRequest.requestedLength)")
-            }
-            
             work.finish()
             pendingRequestWorks.removeAll { $0 == work }
+            cancel()
         }
     }
     

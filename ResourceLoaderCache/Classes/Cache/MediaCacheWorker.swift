@@ -102,7 +102,7 @@ class MediaCacheWorker {
     
     /// 根据 range 分割任务 - 如果没有交集则为 remote，如果有交集， 则交集为 local，不相交部分为 remote
     /// - Parameter range: 需要下载的范围
-    /// - Returns: 区分是否有缓存
+    /// - Returns: 标识local 和 remote
     func cachedDataActions(for range: Range<UInt64>) -> [CacheAction] {
 
         guard !range.isEmpty else { return [] }

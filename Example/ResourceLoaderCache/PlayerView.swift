@@ -87,7 +87,7 @@ open class PlayerView: UIView {
     public func setPlayerSourceUrl(url: URL) {
         
         videoLoader = ResourceLoaderManager()
-        videoLoader?.cleanCache()
+        // videoLoader?.cleanCache()
         
         if playerItem != nil {
             playerItem?.removeObserver(self, forKeyPath: "status")
@@ -137,6 +137,8 @@ open class PlayerView: UIView {
         
         addSubview(loadingIndicator)
         loadingIndicator.startAnimating()
+        
+        autoPlay = true
     }
     
     func notify() {

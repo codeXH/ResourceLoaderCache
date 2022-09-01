@@ -98,13 +98,11 @@ public class CacheConfiguration: Codable {
     /// - Parameter range: 分片数据的 range
     func addCacheFragment(range: Range<UInt64>) {
         guard !range.isEmpty else { return }
-        // 0..<2
-        log("internalCacheFragments = \(internalCacheFragments)")
+        
         if internalCacheFragments.isEmpty {
             internalCacheFragments.append(range)
         } else {
             // 保存大数时 indexSet 不存储每一个数，只存储 0..<x 范围，性能比 Set 更好
-            // 2..<13632
             var indexSet = IndexSet()
             for (index, ran) in internalCacheFragments.enumerated() {
                 // range 包含在数组中
@@ -160,13 +158,10 @@ public class CacheConfiguration: Codable {
                 }
             }
         }
-        
-        log("addCacheFragment result internalCacheFragments = \(internalCacheFragments)")
     }
     
     /// 记录保存分段视频的数据和花费的时间
     func addDownloadedBytes(bytes: Int, spent time: TimeInterval) {
-        log("addDownloadedBytes bytes:\(bytes) time:\(time)")
         downloadInfos.append(DownloadInfo(bytes: bytes, time: time))
     }
 }

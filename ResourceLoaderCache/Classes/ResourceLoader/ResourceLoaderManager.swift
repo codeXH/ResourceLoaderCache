@@ -107,10 +107,6 @@ final public class ResourceLoaderManager: NSObject, AVAssetResourceLoaderDelegat
     
     /// 把 loadingRequest 移出下载任务的回调列表（停止填充）
     public func resourceLoader(_ resourceLoader: AVAssetResourceLoader, didCancel loadingRequest: AVAssetResourceLoadingRequest) {
-        if let dataRequest = loadingRequest.dataRequest {
-            log("resourceLoader did Cancel offset = \(dataRequest.currentOffset) length = \(dataRequest.requestedLength)")
-        }
-        
         let loader = loader(for: loadingRequest)
         loader?.remove(request: loadingRequest)
     }

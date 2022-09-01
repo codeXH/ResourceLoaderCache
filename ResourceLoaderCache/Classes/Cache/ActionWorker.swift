@@ -88,7 +88,6 @@ class ActionWorker {
         if isCancelled { return }
         
         guard let action = actions.first else {
-            log("delegate?.action(worker: self, didFinish: nil)")
             delegate?.action(worker: self, didFinish: nil)
             return
         }
@@ -114,10 +113,8 @@ class ActionWorker {
         }
         
         if action.range.lowerBound == 0, action.range.upperBound == 2 {
-            log("cache delegate?.action(worker: self, didReceive: URLResponse())")
             delegate?.action(worker: self, didReceive: URLResponse())
         }
-        log("cache delegate?.action(worker: self, didReceive: data, isLocal: true)")
         delegate?.action(worker: self, didReceive: data, isLocal: true)
         processActions()
     }
@@ -174,7 +171,6 @@ extension ActionWorker: URLSessionDelegateObjectDelegate {
         if let mimeType = response.mimeType, !mimeType.contains("video/"), !mimeType.contains("audio/"), !mimeType.contains("application") {
             completionHandler(.cancel)
         } else {
-            log("request delegate?.action(worker: self, didReceive: response)")
             delegate?.action(worker: self, didReceive: response)
             
             if canSaveToCache {
@@ -187,10 +183,9 @@ extension ActionWorker: URLSessionDelegateObjectDelegate {
     func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive data: Data) {
     
         if isCancelled { return }
-        var ran: Range<UInt64> = 0..<1
+        
         if canSaveToCache {
             let range = UInt64(startOffset) ..< UInt64(startOffset + data.count)
-            ran = range
             do {
                 try cacheWorker.cache(data: data, for: range)
             } catch {
@@ -200,13 +195,12 @@ extension ActionWorker: URLSessionDelegateObjectDelegate {
             cacheWorker.save()
         }
         startOffset += data.count
-        log("request delegate?.action(worker: self, didReceive: data, isLocal: false, range: \(ran)")
         delegate?.action(worker: self, didReceive: data, isLocal: false)
         notifyDownloadProgress(with: false, finished: false)
     }
     
+    /// 下载出错，中途取消
     func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
-        log("urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?)")
         if canSaveToCache {
             cacheWorker.finishWritting()
             cacheWorker.save()

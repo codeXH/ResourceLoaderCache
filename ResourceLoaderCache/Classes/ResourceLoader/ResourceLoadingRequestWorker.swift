@@ -37,6 +37,7 @@ final class ResourceLoadingRequestWorker {
         if dataRequest.currentOffset != 0 {
             offset = dataRequest.currentOffset
         }
+        log(MemoryAddress(of: mediaDownloader))
         log("offset = \(offset) length = \(length) toEnd = \(toEnd)")
         mediaDownloader.downloadTask(fromOffset: UInt64(offset), length: UInt64(length), to: toEnd)
     }
@@ -52,9 +53,10 @@ final class ResourceLoadingRequestWorker {
     }
     
     /// 如果数据已经请求完成 需要 finish
+    /// 如果是cancel， 会导致请求了一部分的request 被 finished
     func finish() {
         if request.isFinished == false {
-           request.finishLoading(with: MediaCacheError.resourceLoaderCancelled)
+            request.finishLoading(with: MediaCacheError.resourceLoaderCancelled)
        }
     }
 }

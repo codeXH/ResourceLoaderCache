@@ -107,7 +107,6 @@ public class MediaDownloader {
             rangeLength = length
         }
         
-        log("downloadTask range = \(fromOffset ..< fromOffset + rangeLength)")
         // 根据给定的 range，获取需要请求的 range
         let actions = cacheWorker.cachedDataActions(for: fromOffset ..< (fromOffset + rangeLength))
         log("actions = \(actions)")
