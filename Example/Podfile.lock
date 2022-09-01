@@ -1,5 +1,5 @@
 PODS:
-  - ResourceLoaderCache (0.1.0)
+  - ResourceLoaderCache (0.0.1)
   - SnapKit (5.6.0)
 
 DEPENDENCIES:
@@ -15,9 +15,9 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  ResourceLoaderCache: 9e3d88b28ea7a32354fb7b66d585badad4545cb1
+  ResourceLoaderCache: a4123cf759ce6b02eb6a0017d51fc13cfa3ac7f2
   SnapKit: e01d52ebb8ddbc333eefe2132acf85c8227d9c25
 
-PODFILE CHECKSUM: a3df64b99f92092a53cb5bfec8a8fe432f504b25
+PODFILE CHECKSUM: e33be5f87e05b39b5d8cdbbade50b00f65a7f91a
 
 COCOAPODS: 1.11.3
