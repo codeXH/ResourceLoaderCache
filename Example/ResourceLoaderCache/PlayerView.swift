@@ -146,8 +146,8 @@ open class PlayerView: UIView {
     }
     
     func notify() {
-        NotificationCenter.default.addObserver(self, selector: #selector(enterBack), name: NSNotification.Name.UIApplicationDidEnterBackground, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(enterForground), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(enterBack), name: UIApplication.didEnterBackgroundNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(enterForground), name: UIApplication.didBecomeActiveNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(enterForground), name: .CacheManagerDidUpdateCache, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(enterForground), name: .CacheManagerDidFinishCache, object: nil)
     }

@@ -36,7 +36,7 @@ open class PlayerLoading: UIView {
     }
     
     internal func commonInit(){
-        timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseOut)
+        timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeOut)
         setupIndicatorLayer()
     }
     
@@ -44,8 +44,8 @@ open class PlayerLoading: UIView {
         indicatorLayer.strokeColor = UIColor.white.cgColor
         indicatorLayer.fillColor = nil
         indicatorLayer.lineWidth = 2.0
-        indicatorLayer.lineJoin = kCALineCapRound
-        indicatorLayer.lineCap = kCALineCapRound
+        indicatorLayer.lineJoin = CAShapeLayerLineJoin.round
+        indicatorLayer.lineCap = CAShapeLayerLineCap.round
         layer.addSublayer(indicatorLayer)
         updateIndicatorLayerPath()
     }

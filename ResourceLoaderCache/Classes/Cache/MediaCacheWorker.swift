@@ -198,7 +198,10 @@ class MediaCacheWorker {
     func startWritting() {
         if writting == false {
             // 退到后台，触发保存操作
-            NotificationCenter.default.addObserver(self, selector: #selector(save), name: NSNotification.Name.UIApplicationDidEnterBackground, object: nil)
+            NotificationCenter.default.addObserver(self,
+                                                   selector: #selector(save),
+                                                   name: UIApplication.didEnterBackgroundNotification,
+                                                   object: nil)
         }
         writting.toggle()
         startWriteDate = Date()

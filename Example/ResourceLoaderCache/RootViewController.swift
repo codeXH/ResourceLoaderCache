@@ -17,7 +17,7 @@ class RootViewController: UITableViewController {
     var urls = [ "http://vfx.mtime.cn/Video/2019/02/04/mp4/190204084208765161.mp4",
                  "https://mvvideo5.meitudata.com/56ea0e90d6cb2653.mp4",
                  "http://220.249.115.46:18080/wav/Lovey_Dovey.mp4",
-                 // 不支持随机访问，只能顺序播放
+                 // 不支持随机访问，只能顺序播放，seek 时需要等待前面的下载完成才行
                  "http://220.249.115.46:18080/wav/day_by_day.mp4",
                  "http://vfx.mtime.cn/Video/2019/03/21/mp4/190321153853126488.mp4",
                  "http://vfx.mtime.cn/Video/2019/03/19/mp4/190319222227698228.mp4",
